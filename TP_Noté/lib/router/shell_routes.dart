@@ -87,38 +87,7 @@ class ScreenA extends StatelessWidget {
   }
 }
 
-class ScreenB extends StatelessWidget {
-  const ScreenB({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body:  Center(
-        child: Column(
-          children: [
-            const Text("Screen B"),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
-class ScreenC extends StatelessWidget {
-  const ScreenC({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Center(
-        child: Column(
-          children: [
-            const Text("Screen C"),
-          ],
-        ),
-      ),
-    );
-  }
-}
+
