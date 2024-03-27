@@ -13,4 +13,19 @@ class ScoreDB {
     PRIMARY KEY("pseudo", "niveau")
     );""");
   }
+
+  Future<int> insert({required String pseudo, required int niveau, required int score}) async {
+    final database = await DatabaseService().database;
+    return await database.rawInsert(
+      '''INSERT INTO $tableName (pseudo, niveau, score) VALUES (?,?,?)''',
+      [pseudo, niveau, score],
+    );
+  }
+
+  Future<List<Score>> fetchAll() async {
+    final database = await DatabaseService().database;
+    final scores = await database.rawQuery(
+      '''SELECT * from $tableName ORDER BY score ASC''');
+    return scores.map((score) => Score.fromSqFliteDataBase(score)).toList();
+  }
 }
