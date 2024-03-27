@@ -69,24 +69,6 @@ class ScaffoldWithNavBar extends StatelessWidget {
 }
 
 
-class ScreenA extends StatelessWidget {
-  const ScreenA({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Center(
-        child: Column(
-          children: [
-            const Text("Screen A"),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 
 
 

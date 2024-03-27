@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:td3/router/shell_routes.dart';
 import 'package:td3/ui/ScreenJeu.dart';
+import 'package:td3/ui/ScreenScore.dart';
 import 'package:td3/ui/homesreen.dart';
 
 import '../ui/ScreenRegles.dart';
@@ -38,7 +39,7 @@ final router = GoRouter(
                   GoRoute(
                       path: 'Scores',
                       builder: (context, state) {
-                        return const ScreenA();
+                        return const ScreenScore();
                       },
                   ),
                   GoRoute(
