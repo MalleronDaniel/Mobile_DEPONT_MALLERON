@@ -10,22 +10,22 @@ class ScaffoldWithNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Shell Routes"),
+        title: const Text("Le Juste Prix"),
       ),
       body: child,
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Screen A",
+            icon: Icon(Icons.score),
+            label: "Scores",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add),
-            label: "Screen B",
+            icon: Icon(Icons.play_arrow),
+            label: "Jouer",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Screen C",
+            icon: Icon(Icons.rule),
+            label: "Regles",
           ),
         ],
         currentIndex: _calculatorSelectedIndex(context),
@@ -39,13 +39,13 @@ class ScaffoldWithNavBar extends StatelessWidget {
         .of(context)
         .uri
         .toString();
-    if (location.startsWith("/home/a")) {
+    if (location.startsWith("/home/Scores")) {
       return 0;
     }
-    if (location.startsWith("/home/b")) {
+    if (location.startsWith("/home/Jouer")) {
       return 1;
     }
-    if (location.startsWith("/home/c")) {
+    if (location.startsWith("/home/Regles")) {
       return 2;
     }
     return 0;
@@ -54,15 +54,15 @@ class ScaffoldWithNavBar extends StatelessWidget {
   void _onItemTapped(int index, BuildContext context) {
     switch (index) {
       case 0:
-        GoRouter.of(context).go("/home/a");
+        GoRouter.of(context).go("/home/Scores");
         break;
 
       case 1:
-        GoRouter.of(context).go("/home/b");
+        GoRouter.of(context).go("/home/Jouer");
         break;
 
       case 2:
-        GoRouter.of(context).go("/home/c");
+        GoRouter.of(context).go("/home/Regles");
         break;
     }
   }
@@ -80,11 +80,6 @@ class ScreenA extends StatelessWidget {
         child: Column(
           children: [
             const Text("Screen A"),
-            TextButton(
-                onPressed: (){
-                  GoRouter.of(context).go('/home/a/details');
-                },
-                child: const Text('Go to Detail'))
           ],
         ),
       ),
@@ -92,67 +87,7 @@ class ScreenA extends StatelessWidget {
   }
 }
 
-class ScreenB extends StatelessWidget {
-  const ScreenB({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body:  Center(
-        child: Column(
-          children: [
-            const Text("Screen B"),
-            TextButton(
-                onPressed: (){
-                  GoRouter.of(context).go('/home/b/details');
-                },
-                child: const Text('Go to Detail'))
-          ],
-        ),
-      ),
-    );
-  }
-}
 
-class ScreenC extends StatelessWidget {
-  const ScreenC({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Center(
-        child: Column(
-          children: [
-            const Text("Screen C"),
-            TextButton(
-                onPressed: (){
-                  GoRouter.of(context).go('/home/c/details');
 
-                }, 
-                child: const Text('Go to Detail'))
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class DetailSreenNavBar extends StatelessWidget{
-  final String label;
-
-  const DetailSreenNavBar({required this.label,super.key});
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Detail Screen'),
-      ),
-      body: Center(
-        child: Text('Detail for $label'),
-      ),
-    );
-  }
-
-}
