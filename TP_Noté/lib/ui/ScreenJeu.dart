@@ -14,34 +14,57 @@ class _ScreenJeuState extends State<ScreenJeu> {
   final Random _random = Random();
   late int _targetPrice;
   String _feedback = '';
+  int _triesLeft = 0;
   bool _gameStarted = false;
 
-  void _startGame() {
+  void _startGame(int level) {
     setState(() {
       _gameStarted = true;
-      _generateTargetPrice();
+      _generateTargetPrice(level);
     });
   }
 
-  void _generateTargetPrice() {
-    _targetPrice = _random.nextInt(1001);
-    _feedback = 'Le prix à deviner est entre 0 et 1000.';
+  void _generateTargetPrice(int level) {
+    int minPrice, maxPrice, maxTries;
+    switch (level) {
+      case 1:
+        minPrice = 0;
+        maxPrice = 100;
+        maxTries = 30;
+        break;
+      case 2:
+        minPrice = 0;
+        maxPrice = 1000;
+        maxTries = 15;
+        break;
+      case 3:
+        minPrice = 0;
+        maxPrice = 5000;
+        maxTries = 10;
+        break;
+      default:
+        minPrice = 0;
+        maxPrice = 100;
+        maxTries = 30;
+    }
+    _targetPrice = minPrice + _random.nextInt(maxPrice - minPrice + 1);
+    _feedback = 'Le prix à deviner est entre $minPrice et $maxPrice.';
+    _triesLeft = maxTries;
   }
 
   void _checkPrice(int guessedPrice) {
-    if (guessedPrice > _targetPrice) {
-      setState(() {
-        _feedback = 'Trop haut !';
-      });
-    } else if (guessedPrice < _targetPrice) {
-      setState(() {
-        _feedback = 'Trop bas !';
-      });
-    } else {
-      setState(() {
-        _feedback = 'Gagné !';
-      });
-    }
+    setState(() {
+      _triesLeft--;
+      if (_triesLeft == 0) {
+        _feedback = 'Game Over. Le chiffre à deviner était $_targetPrice.';
+      } else if (guessedPrice > _targetPrice) {
+        _feedback = 'Le Chiffre est trop haut ! Essais restants : $_triesLeft';
+      } else if (guessedPrice < _targetPrice) {
+        _feedback = 'Le Chiffre est trop bas ! Essais restants : $_triesLeft';
+      } else {
+        _feedback = 'Vous avez Gagné !';
+      }
+    });
   }
 
   void _resetGame() {
@@ -74,30 +97,38 @@ class _ScreenJeuState extends State<ScreenJeu> {
                 ),
               ),
               SizedBox(height: 20),
-              TextField(
-                controller: _priceController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  labelText: 'Entrez votre estimation',
-                ),
-                onChanged: (value) {
-                  if (value.isNotEmpty) {
-                    int? guessedPrice = int.tryParse(value);
-                    if (guessedPrice != null) {
-                      _checkPrice(guessedPrice);
-                    }
-                  }
-                },
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _priceController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: 'Entrez votre estimation',
+                      ),
+                      onChanged: (value) {
+                        // Pas besoin de validation ici
+                      },
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_priceController.text.isNotEmpty) {
+                        int? guessedPrice =
+                        int.tryParse(_priceController.text);
+                        if (guessedPrice != null) {
+                          _checkPrice(guessedPrice);
+                        }
+                      }
+                    },
+                    child: Text('Valider'),
+                  ),
+                ],
               ),
               SizedBox(height: 20),
-              if (_feedback != 'Gagné !')
-                Text(
-                  'Le prix à deviner est entre 0 et 1000.',
-                  style: TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-              if (_feedback == 'Gagné !')
+              if (_feedback == 'Vous avez Gagné !' || _triesLeft == 0)
                 ElevatedButton(
                   onPressed: () {
                     _resetGame();
@@ -119,10 +150,10 @@ class _ScreenJeuState extends State<ScreenJeu> {
               ElevatedButton(
                 onPressed: () {
                   if (_nameController.text.isNotEmpty) {
-                    _startGame();
+                    _showLevelDialog();
                   }
                 },
-                child: Text('Lancer le Jeu'),
+                child: Text('Choisir le Niveau'),
               ),
             ],
           ),
@@ -130,5 +161,41 @@ class _ScreenJeuState extends State<ScreenJeu> {
       ),
     );
   }
-}
 
+  void _showLevelDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Choisir le Niveau'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  _startGame(1); // Niveau 1
+                  Navigator.pop(context); // Ferme la boîte de dialogue
+                },
+                child: Text('Niveau 1 (0-100)'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  _startGame(2); // Niveau 2
+                  Navigator.pop(context); // Ferme la boîte de dialogue
+                },
+                child: Text('Niveau 2 (0-1000)'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  _startGame(3); // Niveau 3
+                  Navigator.pop(context); // Ferme la boîte de dialogue
+                },
+                child: Text('Niveau 3 (0-5000)'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
