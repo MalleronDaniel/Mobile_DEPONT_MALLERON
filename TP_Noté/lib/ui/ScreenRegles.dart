@@ -7,20 +7,27 @@ class ScreenRegles extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Règles du Jeu - Juste Prix'),
+        title: const Text(
+          'Règles du Jeu - Juste Prix',
+          style: TextStyle(
+            fontSize: 24.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
       ),
-      body: Center(
+      body: const Center(
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: EdgeInsets.all(20.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-
               SizedBox(height: 20),
               Text(
                 "Le jeu du Juste Prix consiste à deviner le prix. Vous devez estimer un prix qui vous semble correct. Ensuite, vous recevrez des indications si votre estimation est trop élevée, trop basse ou si vous avez trouvé le prix exact. Bonne chance !",
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 18.0,
+                  color: Colors.black87,
                 ),
                 textAlign: TextAlign.center,
               ),

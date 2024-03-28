@@ -1,12 +1,8 @@
-import 'dart:js';
-import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:td3/router/shell_routes.dart';
 import 'package:td3/ui/ScreenJeu.dart';
 import 'package:td3/ui/ScreenScore.dart';
-import 'package:td3/ui/homesreen.dart';
 
 import '../ui/ScreenRegles.dart';
 
@@ -17,18 +13,24 @@ final GlobalKey<NavigatorState> _shellnavigatorkey = GlobalKey<NavigatorState>()
 
 final router = GoRouter(
     navigatorKey: _routenavigatorkey,
-    initialLocation: '/home',
+    initialLocation: '/home/Jouer',
     routes: <RouteBase>[
       GoRoute(
-          path: '/',
+          path: '/home',
           redirect: (context,state){
-            return '/home';
+            return '/home/Jouer';
+          }
+      ),
+      GoRoute(
+          path: '/home',
+          redirect: (context,state){
+            return '/home/Jouer';
           }
       ),
       GoRoute(
           path: '/home',
           name: 'home',
-          builder: (context, state) => const HomeScreen(),
+          builder: (context, state) => const ScreenJeu(),
           routes: <RouteBase> [
             ShellRoute(
                 navigatorKey: _shellnavigatorkey,

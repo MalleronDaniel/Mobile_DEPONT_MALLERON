@@ -10,7 +10,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Le Juste Prix"),
+        automaticallyImplyLeading: false, // Désactiver le bouton de retour
       ),
       body: child,
       bottomNavigationBar: BottomNavigationBar(
@@ -67,9 +67,3 @@ class ScaffoldWithNavBar extends StatelessWidget {
     }
   }
 }
-
-
-
-
-
-
