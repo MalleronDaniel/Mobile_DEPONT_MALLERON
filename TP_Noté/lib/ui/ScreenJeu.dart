@@ -12,7 +12,6 @@ class ScreenJeu extends StatefulWidget {
 }
 
 class _ScreenJeuState extends State<ScreenJeu> {
-  // Déclarations des variables
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final Random _random = Random();
@@ -57,23 +56,28 @@ class _ScreenJeuState extends State<ScreenJeu> {
     _triesLeft = maxTries;
   }
 
-  void _checkPrice(int guessedPrice) {
-    setState(() {
-      _triesLeft--;
-      if (_triesLeft == 0) {
-        _feedback = 'Game Over. Le chiffre à deviner était $_targetPrice.';
-      } else if (guessedPrice > _targetPrice) {
-        _feedback = 'Le Chiffre est trop haut ! Essais restants : $_triesLeft';
-      } else if (guessedPrice < _targetPrice) {
-        _feedback = 'Le Chiffre est trop bas ! Essais restants : $_triesLeft';
+void _checkPrice(int guessedPrice) {
+  setState(() {
+    _triesLeft--;
+    if (_triesLeft == 0) {
+      _feedback = 'Game Over. Le chiffre à deviner était $_targetPrice.';
+    } else if (guessedPrice > _targetPrice) {
+      _feedback = 'Le Chiffre est trop haut ! Essais restants : $_triesLeft';
+    } else if (guessedPrice < _targetPrice) {
+      _feedback = 'Le Chiffre est trop bas ! Essais restants : $_triesLeft';
+    } else {
+      _feedback = 'Vous avez Gagné !';
+      _saveScore();
+      if (_getSelectedLevel() < 3) {
+        _showNextLevelDialog();
       } else {
-        _feedback = 'Vous avez Gagné !';
-        _saveScore();
+        _feedback += ' Félicitations ! Vous avez terminé le dernier niveau.';
       }
-    });
-  }
+    }
+  });
+}
 
-  // Méthode pour enregistrer le score dans la base de données
+
   Future<void> _saveScore() async {
     int initialTries;
     switch (_getSelectedLevel()) {
@@ -99,11 +103,10 @@ class _ScreenJeuState extends State<ScreenJeu> {
     );
   }
 
-  // Méthodes utilitaires
   int _getSelectedLevel() {
     if (_targetPrice >= 0 && _targetPrice <= 100) {
       return 1;
-    } else if (_targetPrice > 100 && _targetPrice <= 1000) {
+    } else if (_targetPrice > 1 && _targetPrice <= 1000) {
       return 2;
     } else {
       return 3;
@@ -119,7 +122,38 @@ class _ScreenJeuState extends State<ScreenJeu> {
     });
   }
 
-  // Méthode de construction de l'interface utilisateur
+void _showNextLevelDialog() {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Félicitations ! Passer au Niveau Suivant ?'),
+        content: Text('Voulez-vous passer au niveau ${_getSelectedLevel() + 1} ?'),
+        actions: <Widget>[
+          ElevatedButton(
+            onPressed: () {
+              if (_getSelectedLevel() < 3) {
+                _startGame(_getSelectedLevel() + 1);
+                Navigator.pop(context);
+              }
+            },
+            child: const Text('Oui'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              _resetGame();
+            },
+            child: const Text('Non'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -144,7 +178,6 @@ class _ScreenJeuState extends State<ScreenJeu> {
     );
   }
 
-  // Construction de l'interface utilisateur pour le jeu
   Widget _buildGameUI() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -186,7 +219,7 @@ class _ScreenJeuState extends State<ScreenJeu> {
           ],
         ),
         const SizedBox(height: 20),
-        if (_feedback == 'Vous avez Gagné !' || _triesLeft == 0)
+        if (_triesLeft == 0 || _feedback.contains('Gagné') && _getSelectedLevel() == 3)
           ElevatedButton(
             onPressed: () {
               _resetGame();
@@ -197,7 +230,6 @@ class _ScreenJeuState extends State<ScreenJeu> {
     );
   }
 
-  // Construction de l'interface utilisateur pour le démarrage du jeu
   Widget _buildStartUI() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -221,7 +253,6 @@ class _ScreenJeuState extends State<ScreenJeu> {
     );
   }
 
-  // Affichage de la boîte de dialogue pour choisir le niveau
   void _showLevelDialog() {
     showDialog(
       context: context,
@@ -234,21 +265,21 @@ class _ScreenJeuState extends State<ScreenJeu> {
               ElevatedButton(
                 onPressed: () {
                   _startGame(1); // Niveau 1
-                  Navigator.pop(context); // Ferme la boîte de dialogue
+                  Navigator.pop(context);
                 },
                 child: const Text('Niveau 1 (0-100)'),
               ),
               ElevatedButton(
                 onPressed: () {
                   _startGame(2); // Niveau 2
-                  Navigator.pop(context); // Ferme la boîte de dialogue
+                  Navigator.pop(context);
                 },
                 child: const Text('Niveau 2 (0-1000)'),
               ),
               ElevatedButton(
                 onPressed: () {
                   _startGame(3); // Niveau 3
-                  Navigator.pop(context); // Ferme la boîte de dialogue
+                  Navigator.pop(context);
                 },
                 child: const Text('Niveau 3 (0-5000)'),
               ),
