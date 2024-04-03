@@ -24,7 +24,12 @@ class ScreenRegles extends StatelessWidget {
             children: [
               SizedBox(height: 20),
               Text(
-                "Le jeu du Juste Prix consiste à deviner le prix. Vous devez estimer un prix qui vous semble correct. Ensuite, vous recevrez des indications si votre estimation est trop élevée, trop basse ou si vous avez trouvé le prix exact. Bonne chance !",
+                "Le jeu du Juste Prix consiste à deviner le prix. Vous devez estimer un prix qui vous semble correct. Ensuite, vous recevrez des indications si votre estimation est trop élevée, trop basse ou si vous avez trouvé le prix exact.\n\n"
+                    "Voici les différents niveaux :\n"
+                    "- Niveau Facile : 0-100 avec 30 essais\n"
+                    "- Niveau Moyen : 0-1000 avec 15 essais\n"
+                    "- Niveau Difficile : 0-5000 avec 10 essais\n\n"
+                    "Bonne chance !",
                 style: TextStyle(
                   fontSize: 18.0,
                   color: Colors.black87,
